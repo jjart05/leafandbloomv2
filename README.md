@@ -21,7 +21,7 @@ interface, smooth animations, and mobile-friendly layouts.
 ## Project Structure
 
 ``` text
-│
+
 ├── index.html          # Homepage
 ├── about.html          # About page
 ├── products.html       # Shop page
