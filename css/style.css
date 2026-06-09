@@ -426,6 +426,17 @@ body.dark-mode .mobile-nav { background: rgba(26,26,24,0.92); border-left-color:
 .reveal-left.revealed { opacity: 1; transform: none; }
 .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity var(--dur-slow) var(--ease-smooth), transform var(--dur-slow) var(--ease-smooth); }
 .reveal-right.revealed { opacity: 1; transform: none; }
+
+/* Prevent reveal animations from causing horizontal scroll on mobile */
+@media (max-width: 768px) {
+  .reveal-left, .reveal-right {
+    transform: translateY(20px) !important;
+    overflow: hidden;
+  }
+  .reveal-left.revealed, .reveal-right.revealed {
+    transform: none !important;
+  }
+}
 .delay-1 { transition-delay: 0.1s; }
 .delay-2 { transition-delay: 0.2s; }
 .delay-3 { transition-delay: 0.3s; }
@@ -1901,5 +1912,325 @@ body.dark-mode .theme-toggle-mobile {
   background: rgba(255,255,255,0.06) !important;
   border-color: rgba(255,255,255,0.15) !important;
   color: #f5e6c8 !important;
+}
+
+
+/* ============================================================
+   FEEDBACK PAGE — Mobile Fix
+   ============================================================ */
+
+/* Prevent ANY horizontal overflow site-wide */
+html {
+  overflow-x: hidden;
+}
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Kill horizontal scroll on every section */
+section, main, .container, .feedback-grid, .feedback-wrap {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  /* ── Page header: reduce excessive top space ── */
+  .page-header {
+    padding-top: calc(var(--nav-h) + 2rem) !important;
+    padding-bottom: 2rem !important;
+  }
+  .page-header-title {
+    font-size: clamp(2rem, 8vw, 3rem) !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .section-sub {
+    font-size: 0.875rem !important;
+    margin-top: 0.5rem !important;
+  }
+  .breadcrumb {
+    margin-bottom: 0.875rem !important;
+  }
+
+  /* ── Feedback section: no extra padding ── */
+  .feedback-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+
+  /* ── Feedback card: stays within viewport ── */
+  .feedback-wrap {
+    padding: 1.25rem 1rem !important;
+    border-radius: var(--radius-md) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  /* ── Container: tight horizontal padding on mobile ── */
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* ── Star buttons: smaller on mobile, no overflow ── */
+  .star-rating {
+    gap: 0.5rem !important;
+    flex-wrap: nowrap !important;
+  }
+  .star-btn {
+    font-size: 1.75rem !important;
+    padding: 0 !important;
+    touch-action: manipulation !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* ── Form rows: stack on mobile ── */
+  .form-row {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* ── Inputs: full width, no overflow ── */
+  input, textarea, select {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* ── Section padding: tighter ── */
+  .section {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header {
+    padding-top: calc(var(--nav-h) + 1.25rem) !important;
+    padding-bottom: 1.5rem !important;
+  }
+  .feedback-wrap {
+    padding: 1.25rem 1rem !important;
+  }
+  .star-btn {
+    font-size: 1.6rem !important;
+  }
+  /* Checkbox grid: 2 cols on mobile */
+  .checkbox-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.5rem !important;
+  }
+  .checkbox-item label {
+    font-size: 0.78rem !important;
+  }
+}
+
+
+/* ============================================================
+   GLOBAL HORIZONTAL OVERFLOW FIX — All pages, all sections
+   Targets every known source of horizontal bleed on mobile
+   ============================================================ */
+
+/* ── Root: hard-clip everything ── */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+}
+
+/* ── Hero orbs: clip them inside hero, don't let them bleed ── */
+.hero {
+  overflow: hidden !important;
+}
+.hero-orb-1,
+.hero-orb-2 {
+  pointer-events: none;
+}
+@media (max-width: 768px) {
+  .hero-orb-1 { width: 220px !important; height: 220px !important; right: -60px !important; }
+  .hero-orb-2 { width: 180px !important; height: 180px !important; right: 5% !important; }
+}
+
+/* ── Decorative ::before / ::after pseudo-elements that bleed ── */
+@media (max-width: 768px) {
+  /* page-header orb */
+  .page-header { overflow: hidden !important; }
+  .page-header::before { display: none !important; }
+
+  /* newsletter orb */
+  .newsletter { overflow: hidden !important; }
+  .newsletter::before { display: none !important; }
+
+  /* split-img decorative border offset */
+  .split-img::after { display: none !important; }
+  .split-img-accent { display: none !important; }
+}
+
+/* ── Testimonial cards: fix min-width on narrow screens ── */
+@media (max-width: 768px) {
+  .testimonial-card {
+    min-width: calc(100vw - 3rem) !important;
+    max-width: calc(100vw - 3rem) !important;
+    padding: 1.75rem 1.5rem !important;
+  }
+}
+@media (max-width: 480px) {
+  .testimonial-card {
+    min-width: calc(100vw - 2rem) !important;
+    max-width: calc(100vw - 2rem) !important;
+    padding: 1.5rem 1.25rem !important;
+  }
+  /* Testimonials wrapper clips the track */
+  .testimonials-wrap,
+  .testimonials {
+    overflow: hidden !important;
+  }
+  .testimonials-track {
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    gap: 0.875rem !important;
+  }
+}
+
+/* ── Products grid: minmax(280px) can overflow 360px screens ── */
+@media (max-width: 600px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.75rem !important;
+  }
+}
+@media (max-width: 360px) {
+  .products-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── Services grid: minmax(300px) overflows on 375px screens ── */
+@media (max-width: 640px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.875rem !important;
+  }
+}
+@media (max-width: 360px) {
+  .services-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── Gallery: prevent row overflow ── */
+@media (max-width: 768px) {
+  .gallery-grid {
+    overflow: hidden !important;
+  }
+  .gallery-item {
+    overflow: hidden !important;
+  }
+}
+
+/* ── Split layout: prevent side-by-side overflow ── */
+@media (max-width: 768px) {
+  .split {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+    overflow: hidden !important;
+  }
+  .split-img img {
+    height: 280px !important;
+    width: 100% !important;
+  }
+}
+
+/* ── Newsletter form: stack on mobile ── */
+@media (max-width: 600px) {
+  .newsletter-form {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+  .newsletter-form input,
+  .newsletter-form .btn {
+    width: 100% !important;
+  }
+}
+
+/* ── Container: always constrained ── */
+.container {
+  box-sizing: border-box !important;
+  max-width: 100% !important;
+}
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+}
+@media (max-width: 480px) {
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
+/* ── All sections: clip overflow ── */
+section,
+.section,
+.page-header,
+.hero,
+.newsletter,
+.stats-bar,
+footer {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* ── All grids and flex rows ── */
+.products-grid,
+.services-grid,
+.gallery-grid,
+.team-grid,
+.stats-grid,
+.feedback-grid,
+.contact-grid,
+.footer-grid,
+.checkout-layout,
+.values-grid,
+.process-steps {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+
+/* ── Form inputs: always within bounds ── */
+input,
+textarea,
+select {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* ── Cards: no bleed ── */
+.product-card,
+.service-card,
+.testimonial-card,
+.review-card,
+.feedback-wrap,
+.checkout-wrap,
+.contact-card {
+  box-sizing: border-box !important;
+  max-width: 100% !important;
+}
+
+/* ── Reveal animations: never use horizontal translateX on mobile ── */
+@media (max-width: 1024px) {
+  .reveal-left,
+  .reveal-right {
+    transform: translateY(24px) !important;
+  }
+  .reveal-left.revealed,
+  .reveal-right.revealed {
+    transform: none !important;
+  }
 }
 

@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="./css/style.css" />
   <style>
     /* Feedback-specific styles */
-    .feedback-wrap { background: var(--clr-surface); border: 1px solid var(--clr-border); border-radius: var(--radius-lg); padding: 2.5rem; }
+    .feedback-wrap { background: var(--clr-surface); border: 1px solid var(--clr-border); border-radius: var(--radius-lg); padding: 2.5rem; box-sizing: border-box; width: 100%; overflow: hidden; }
     .star-rating { display: flex; gap: 0.4rem; margin: 0.75rem 0 1rem; }
     .star-btn { background: none; border: none; font-size: 2rem; color: var(--clr-border); line-height: 1; transition: color 0.15s, transform 0.15s; }
     .star-btn.active, .star-btn:hover { color: var(--clr-accent); transform: scale(1.1); }
@@ -201,10 +201,11 @@
             </div>
           </div>
 
-          <!-- Reviews List -->
-          <p class="section-label" style="margin-bottom:1rem;">Recent Reviews</p>
-          <div class="reviews-list" id="reviews-list">
-            <!-- Populated by JS -->
+          <!-- Private note — no public reviews shown -->
+          <div style="background:var(--clr-surface);border:1px solid var(--clr-border);border-radius:var(--radius-lg);padding:2rem;text-align:center;">
+            <div style="font-size:1.75rem;margin-bottom:1rem;opacity:0.35;">&#9679;</div>
+            <p style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:0.5rem;color:var(--clr-text);">Thank you for sharing your thoughts.</p>
+            <p style="font-size:0.85rem;color:var(--clr-text-lt);line-height:1.7;">Your feedback is received and reviewed privately.<br>We appreciate every response.</p>
           </div>
         </div>
 
