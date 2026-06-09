@@ -632,17 +632,32 @@ function initFeedbackForm() {
         console.warn('Netlify submit error:', err);
       }
 
-      // Always save to localStorage so reviews show immediately
+      // Always save to shared storage (cross-device sync) + localStorage fallback
       const nameVal    = nameField?.value.trim() || 'Anonymous';
       const commentVal = commentField?.value.trim() || '';
-      const reviews    = JSON.parse(localStorage.getItem('lb_reviews') || '[]');
-      reviews.unshift({
+      const newReview = {
         name:    nameVal,
         rating:  selectedRating,
         comment: commentVal,
-        date:    new Date().toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' })
-      });
-      localStorage.setItem('lb_reviews', JSON.stringify(reviews.slice(0, 20)));
+        date:    new Date().toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' }),
+        ts:      Date.now()
+      };
+
+      // Save to shared storage for cross-device sync
+      try {
+        let existing = [];
+        try {
+          const stored = await window.storage.get('lb_reviews', true);
+          if (stored && stored.value) existing = JSON.parse(stored.value);
+        } catch (e) { /* key doesn't exist yet */ }
+        existing.unshift(newReview);
+        await window.storage.set('lb_reviews', JSON.stringify(existing.slice(0, 50)), true);
+      } catch (storageErr) {
+        // Fallback to localStorage if storage API unavailable
+        const fallback = JSON.parse(localStorage.getItem('lb_reviews') || '[]');
+        fallback.unshift(newReview);
+        localStorage.setItem('lb_reviews', JSON.stringify(fallback.slice(0, 20)));
+      }
 
       // Reset form
       if (btn) { btn.innerHTML = orig; btn.disabled = false; }
@@ -665,10 +680,18 @@ function initFeedbackForm() {
   renderReviews();
 }
 
-function renderReviews() {
+async function renderReviews() {
   const list = document.querySelector('.reviews-list');
   if (!list) return;
-  const reviews = JSON.parse(localStorage.getItem('lb_reviews') || '[]');
+
+  // Try shared storage first (cross-device), fallback to localStorage
+  let reviews = [];
+  try {
+    const stored = await window.storage.get('lb_reviews', true);
+    if (stored && stored.value) reviews = JSON.parse(stored.value);
+  } catch (e) {
+    reviews = JSON.parse(localStorage.getItem('lb_reviews') || '[]');
+  }
   const defaultReviews = [
     { name: 'Sofia Reyes',  rating: 5, comment: 'Leaf & Bloom completely transformed our wedding venue. The floral installations were beyond anything we imagined — pure magic!', date: 'May 15, 2025' },
     { name: 'Marco Torres', rating: 5, comment: 'The monthly plant subscription is the highlight of my month. Each delivery feels like receiving a luxury gift. My apartment has never looked so beautiful.', date: 'April 28, 2025' },

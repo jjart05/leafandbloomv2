@@ -18,8 +18,8 @@
     .star-hint { font-size: 0.82rem; color: var(--clr-accent); font-style: italic; min-height: 1.2em; display: block; margin-bottom: 1rem; }
     .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1.25rem; }
     .checkbox-item { display: flex; align-items: center; gap: 0.5rem; }
-    .checkbox-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--clr-primary); cursor: none; }
-    .checkbox-item label { font-size: 0.85rem; color: var(--clr-text-mid); cursor: none; }
+    .checkbox-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--clr-primary); cursor: pointer; }
+    .checkbox-item label { font-size: 0.85rem; color: var(--clr-text-mid); cursor: pointer; }
     .rating-summary { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
     .rating-bar-bg { height: 6px; background: var(--clr-bg-2); border-radius: 99px; overflow: hidden; }
     .rating-bar-fill { height: 100%; background: var(--clr-accent); border-radius: 99px; transition: width 0.6s var(--ease-smooth); }
@@ -159,15 +159,15 @@
               <!-- Would Recommend -->
               <div class="form-group" style="margin-bottom:1.5rem;">
                 <label style="margin-bottom:0.75rem;display:block;">Would you recommend us?</label>
-                <div style="display:flex;gap:0.75rem;">
-                  <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--clr-text-mid);cursor:none;">
-                    <input type="radio" name="recommend" value="yes" style="accent-color:var(--clr-primary);cursor:none;" /> Yes, definitely!
+                <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
+                  <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--clr-text-mid);cursor:pointer;">
+                    <input type="radio" name="recommend" value="yes" style="accent-color:var(--clr-primary);cursor:pointer;" /> Yes, definitely!
                   </label>
-                  <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--clr-text-mid);cursor:none;">
-                    <input type="radio" name="recommend" value="maybe" style="accent-color:var(--clr-primary);cursor:none;" /> Maybe
+                  <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--clr-text-mid);cursor:pointer;">
+                    <input type="radio" name="recommend" value="maybe" style="accent-color:var(--clr-primary);cursor:pointer;" /> Maybe
                   </label>
-                  <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--clr-text-mid);cursor:none;">
-                    <input type="radio" name="recommend" value="no" style="accent-color:var(--clr-primary);cursor:none;" /> Not yet
+                  <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.9rem;color:var(--clr-text-mid);cursor:pointer;">
+                    <input type="radio" name="recommend" value="no" style="accent-color:var(--clr-primary);cursor:pointer;" /> Not yet
                   </label>
                 </div>
               </div>

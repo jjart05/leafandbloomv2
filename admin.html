@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin — Leaf &amp; Bloom Reviews</title>
   <meta name="robots" content="noindex, nofollow" />
-  <link rel="icon" href="./images/leaf.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -575,19 +574,28 @@
   });
 
   // ── Data ─────────────────────────────────────────────────
-  function getReviews() {
+  async function getReviews() {
+    try {
+      const stored = await window.storage.get(REVIEWS_KEY, true);
+      if (stored && stored.value) return JSON.parse(stored.value);
+    } catch (e) { /* key doesn't exist yet */ }
+    // Fallback to localStorage
     return JSON.parse(localStorage.getItem(REVIEWS_KEY) || '[]');
   }
 
-  function saveReviews(reviews) {
-    localStorage.setItem(REVIEWS_KEY, JSON.stringify(reviews));
+  async function saveReviews(reviews) {
+    try {
+      await window.storage.set(REVIEWS_KEY, JSON.stringify(reviews), true);
+    } catch (e) {
+      localStorage.setItem(REVIEWS_KEY, JSON.stringify(reviews));
+    }
   }
 
-  function deleteReview(index) {
+  async function deleteReview(index) {
     if (!confirm('Delete this review? This cannot be undone.')) return;
-    const reviews = getReviews();
+    const reviews = await getReviews();
     reviews.splice(index, 1);
-    saveReviews(reviews);
+    await saveReviews(reviews);
     renderAll();
   }
 
@@ -609,8 +617,8 @@
   // ── Render ────────────────────────────────────────────────
   const ratingLabels = { 1: 'Poor', 2: 'Fair', 3: 'Good', 4: 'Great', 5: 'Excellent' };
 
-  function renderAll() {
-    const reviews    = getReviews();
+  async function renderAll() {
+    const reviews    = await getReviews();
     const filterVal  = filterSel.value;
     const filtered   = filterVal === 'all'
       ? reviews
@@ -683,15 +691,15 @@
   filterSel.addEventListener('change', renderAll);
 
   // ── Clear all ─────────────────────────────────────────────
-  clearAllBtn.addEventListener('click', () => {
-    if (!confirm('Delete ALL reviews from local storage? This cannot be undone.')) return;
-    saveReviews([]);
+  clearAllBtn.addEventListener('click', async () => {
+    if (!confirm('Delete ALL reviews? This cannot be undone.')) return;
+    await saveReviews([]);
     renderAll();
   });
 
   // ── CSV Export ────────────────────────────────────────────
-  exportBtn.addEventListener('click', () => {
-    const reviews = getReviews();
+  exportBtn.addEventListener('click', async () => {
+    const reviews = await getReviews();
     if (!reviews.length) { alert('No reviews to export.'); return; }
 
     const headers = ['Name', 'Email', 'Rating', 'Star Label', 'Comment', 'Would Recommend', 'Improvements', 'Date'];

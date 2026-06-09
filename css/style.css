@@ -1533,7 +1533,7 @@ footer { background: var(--clr-bg-dark); color: rgba(250,248,245,0.75); padding:
 
   /* Values grid */
   .values-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 1rem;
   }
 
