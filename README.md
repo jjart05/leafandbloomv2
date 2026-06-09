@@ -21,7 +21,6 @@ interface, smooth animations, and mobile-friendly layouts.
 ## Project Structure
 
 ``` text
-leafandbloom_fixed/
 │
 ├── index.html          # Homepage
 ├── about.html          # About page
